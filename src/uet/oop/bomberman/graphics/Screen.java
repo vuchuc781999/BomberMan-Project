@@ -14,7 +14,7 @@ public class Screen {
 	protected int _width, _height;
 	public int[] _pixels;
 	private int _transparentColor = 0xffff00ff;
-	
+	public String[] astring = {"Tiếp Tục","Chơi Lại","Điểm Cao", "Thoát"};
 	public static int xOffset = 0, yOffset = 0;
 	
 	public Screen(int width, int height) {
@@ -99,7 +99,35 @@ public class Screen {
 		g.setColor(Color.yellow);
 		drawCenteredString("POINTS: " + points, getRealWidth(), getRealHeight() + (Game.TILES_SIZE * 2) * Game.SCALE, g);
 	}
+	public void drawDS(Graphics g, Board _board)
+	{
+		g.setColor(Color.black);
+		g.fillRect(0, 0, getRealWidth(), getRealHeight());
 
+		Font font = new Font("Arial", Font.PLAIN, 20 * Game.SCALE);
+		g.setFont(font);
+		g.setColor(Color.white);
+		drawString("Rank", getRealWidth(), 130, g);
+		font = new Font("Arial", Font.PLAIN, 10 * Game.SCALE);
+		g.setFont(font);
+		drawString2("Top\t", 200,200, g);
+		drawString2("Name\t", 300,200, g);
+		drawString2("Points\t", 450,200, g);
+		for(int i =0 ; i< _board.rank.array.size(); i++)
+		{
+			drawString2( i+"", 200,250+i*50, g);
+			drawString2(_board.rank.array.get(i).getName(), 300,250 +i*50, g);
+			drawString2(_board.rank.array.get(i).getPoints(), 450,250 +i*50 ,g);
+		}
+		drawString("Ấn phím BackSpace để trở về !", getRealWidth(), 600,g);
+	}
+	public  void drawString2(String s, int w, int h, Graphics g)
+	{
+		FontMetrics fm = g.getFontMetrics();
+		int x = w;
+		int y = h;
+		g.drawString(s, x, y);
+	}
 	public void drawChangeLevel(Graphics g, int level) {
 		g.setColor(Color.black);
 		g.fillRect(0, 0, getRealWidth(), getRealHeight());
@@ -110,13 +138,41 @@ public class Screen {
 		drawCenteredString("LEVEL " + level, getRealWidth(), getRealHeight(), g);
 		
 	}
-	
-	public void drawPaused(Graphics g) {
+	public  void drawWin(Graphics g, Board board)
+	{
+		g.setColor(Color.black);
+		g.fillRect(0, 0, getRealWidth(), getRealHeight());
+
 		Font font = new Font("Arial", Font.PLAIN, 20 * Game.SCALE);
 		g.setFont(font);
 		g.setColor(Color.white);
-		drawCenteredString("PAUSED", getRealWidth(), getRealHeight(), g);
-		
+		drawCenteredString("You WIN : " + board.getPoints() , getRealWidth(), getRealHeight(), g);
+	}
+	public void drawPaused(Graphics g, int muc) {
+		g.setColor(Color.black);
+		g.fillRect(0, 0, getRealWidth(), getRealHeight());
+
+		Font font = new Font("Arial", Font.PLAIN, 20 * Game.SCALE);
+		g.setFont(font);
+		g.setColor(Color.white);
+		drawString("PAUSED", getRealWidth(), 80, g);
+		font = new Font("Arial", Font.PLAIN, 10 * Game.SCALE);
+		g.setFont(font);
+		for (int i= 0; i< 4;i++)
+		{
+			if (muc ==i)
+			{
+				g.setColor(Color.red);
+				drawString(astring[i], getRealWidth(), 200 +i*100, g);
+				g.setColor(Color.white);
+			}
+			else
+			{
+				drawString(astring[i], getRealWidth(), 200 +i*100, g);
+			}
+		}
+
+
 	}
 
 	public void drawCenteredString(String s, int w, int h, Graphics g) {
@@ -125,7 +181,13 @@ public class Screen {
 	    int y = (fm.getAscent() + (h - (fm.getAscent() + fm.getDescent())) / 2);
 	    g.drawString(s, x, y);
 	 }
-	
+	public  void drawString(String s, int w, int h, Graphics g)
+	{
+		FontMetrics fm = g.getFontMetrics();
+		int x = (w - fm.stringWidth(s)) / 2;
+		int y = h;
+		g.drawString(s, x, y);
+	}
 	public int getWidth() {
 		return _width;
 	}
@@ -140,5 +202,18 @@ public class Screen {
 	
 	public int getRealHeight() {
 		return _height * Game.SCALE;
+	}
+
+	public void drawName(Graphics g, String t)
+	{
+		g.setColor(Color.black);
+		g.fillRect(0, 0, getRealWidth(), getRealHeight());
+
+		Font font = new Font("Arial", Font.PLAIN, 20 * Game.SCALE);
+		g.setFont(font);
+		g.setColor(Color.white);
+		drawString("Xin mời nhập tên! ", getRealWidth(), 80, g);
+		drawString(t,getRealWidth(), 400,g);
+
 	}
 }

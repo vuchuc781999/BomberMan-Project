@@ -37,7 +37,7 @@ public class Frame extends JFrame {
 		setLocationRelativeTo(null);
 		setVisible(true);	
 		
-		_game.start();
+		_game.start(this);
 	}
 	
 	public void setTime(int time) {

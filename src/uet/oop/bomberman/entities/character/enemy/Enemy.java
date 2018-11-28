@@ -152,7 +152,7 @@ public abstract class Enemy extends Character {
 		
 		_board.addPoints(_points);
 
-		Message msg = new Message("+" + _points, getXMessage(), getYMessage(), 2, Color.white, 14);
+		Message msg = new Message("" + _points, getXMessage(), getYMessage(), 2, Color.white, 14);
 		_board.addMessage(msg);
 	}
 	

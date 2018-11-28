@@ -1,6 +1,7 @@
 package uet.oop.bomberman.gui;
 
 import uet.oop.bomberman.Game;
+import uet.oop.bomberman.output.Player;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,11 +23,12 @@ public class InfoPanel extends JPanel {
 		
 		pointsLabel = new JLabel("Points: " + game.getBoard().getPoints());
 		pointsLabel.setForeground(Color.white);
-		pointsLabel.setHorizontalAlignment(JLabel.CENTER);
-		
+		pointsLabel.setHorizontalAlignment(JLabel.LEFT);
+
 		add(timeLabel);
 		add(pointsLabel);
-		
+
+
 		setBackground(Color.black);
 		setPreferredSize(new Dimension(0, 40));
 	}

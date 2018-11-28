@@ -1,5 +1,6 @@
 package uet.oop.bomberman;
 
+import Sound.Sound;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.Message;
 import uet.oop.bomberman.entities.bomb.Bomb;
@@ -12,8 +13,11 @@ import uet.oop.bomberman.graphics.Screen;
 import uet.oop.bomberman.input.Keyboard;
 import uet.oop.bomberman.level.FileLevelLoader;
 import uet.oop.bomberman.level.LevelLoader;
+import uet.oop.bomberman.output.Player;
+import uet.oop.bomberman.output.Rank;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -25,24 +29,25 @@ public class Board implements IRender {
 	protected LevelLoader _levelLoader;
 	protected Game _game;
 	protected Keyboard _input;
+	 public  Player  player;
 	protected Screen _screen;
-	
+	public final int _number = 2; // số màn chơi
 	public Entity[] _entities;
 	public List<Character> _characters = new ArrayList<>();
 	protected List<Bomb> _bombs = new ArrayList<>();
 	private List<Message> _messages = new ArrayList<>();
-	
+	public Rank rank;
 	private int _screenToShow = -1; //1:endgame, 2:changelevel, 3:paused
-	
 	private int _time = Game.TIME;
 	private int _points = Game.POINTS;
-	
+	KeyEvent e;
 	public Board(Game game, Keyboard input, Screen screen) {
 		_game = game;
 		_input = input;
 		_screen = screen;
-		
-		loadLevel(2); //start in level 1
+		rank = new Rank();
+		loadLevel(1); //start in level 1
+		player  = new Player("","0");
 	}
 	
 	@Override
@@ -107,16 +112,28 @@ public class Board implements IRender {
 	}
 	
 	protected void detectEndGame() {
+
 		if(_time <= 0)
 			endGame();
 	}
-	
+
 	public void endGame() {
-		_screenToShow = 1;
+		 	player.setPoints(_points +"");
+			rank.Insert(player);
+			rank.XuatArr();
+			_screenToShow = 1;
+			_game.resetScreenDelay();
+			_game.pause();
+	}
+
+	public  void win()
+	{
+		Sound soundwin = new Sound("win.wav");
+		soundwin.play();
+		_screenToShow =4;
 		_game.resetScreenDelay();
 		_game.pause();
 	}
-	
 	public boolean detectNoEnemies() {
 		int total = 0;
 		for (int i = 0; i < _characters.size(); i++) {
@@ -136,7 +153,13 @@ public class Board implements IRender {
 				_screen.drawChangeLevel(g, _levelLoader.getLevel());
 				break;
 			case 3:
-				_screen.drawPaused(g);
+				_screen.drawPaused(g, _game.muc);
+				break;
+			case 4:
+				_screen.drawWin(g,this);
+				break;
+			case 5:
+				_screen.drawDS(g, this);
 				break;
 		}
 	}
@@ -369,5 +392,5 @@ public class Board implements IRender {
 	public int getHeight() {
 		return _levelLoader.getHeight();
 	}
-	
+
 }
